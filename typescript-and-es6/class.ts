@@ -1,7 +1,7 @@
 console.log('<< CLASSES >>');
 
 class Person {
-  private type: string;
+  private type: string = 'Old man';
   protected age: number = 25;
 
   constructor(public name: string, public username: string) {}
@@ -132,7 +132,7 @@ console.log('<< EXERCISES >>');
 class Car {
   name: string;
   acceleration: number = 0;
-  constructor(public name: string) {
+  constructor(public nume: string) {
     this.name = name;
   }
 
@@ -152,14 +152,14 @@ console.log(car1.acceleration);
 
 // Exercise 2 - Two objects, based on each other ...
 class BaseObject {
-  width = 0,
-  length = 0
-};
+  width = 0;
+  length = 0;
+}
 
 class Rectangle extends BaseObject {
-    calcSize() {
-        return this.width * this.length;
-    }
+  calcSize() {
+    return this.width * this.length;
+  }
 }
 const rectangle = new Rectangle();
 rectangle.width = 5;

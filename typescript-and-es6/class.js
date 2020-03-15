@@ -17,6 +17,7 @@ var Person = /** @class */ (function () {
     function Person(name, username) {
         this.name = name;
         this.username = username;
+        this.type = 'Old man';
         this.age = 25;
     }
     Person.prototype.setAge = function (age) {
@@ -142,8 +143,8 @@ var right = OnlyOne.getInstance();
 console.log('<< EXERCISES >>');
 // Exercise 1 - How was your TypeScript Class?
 var Car = /** @class */ (function () {
-    function Car(name) {
-        this.name = name;
+    function Car(nume) {
+        this.nume = nume;
         this.acceleration = 0;
         this.name = name;
     }
@@ -168,7 +169,6 @@ var BaseObject = /** @class */ (function () {
     }
     return BaseObject;
 }());
-;
 var Rectangle = /** @class */ (function (_super) {
     __extends(Rectangle, _super);
     function Rectangle() {
