@@ -120,15 +120,15 @@ console.log(echo2<string>('Something'));
 
 // Generic classes
 class SimpleMath<T extends number | string, U extends number | string> {
-  baseValue: T;
-  multiplyValue U;
-  calculate() : number {
+  constructor(public baseValue: T, public multiplyValue: U) {}
+
+  calculate(): number {
     return +this.baseValue * +this.multiplyValue;
   }
 }
 
-const simpleMath = new SimpleMath<string, number>();
-simpleMath.baseValue = "10";
+const simpleMath = new SimpleMath<string, number>('0', 0);
+simpleMath.baseValue = '10';
 simpleMath.multiplyValue = 10;
 console.log(simpleMath.calculate());
 
@@ -136,24 +136,23 @@ console.log(simpleMath.calculate());
 
 // Let's keep it simple and only add the following methods to the Map:
 class MyMap<T> {
-    private map: {[key: string]: T} = {};
+  private map: { [key: string]: T } = {};
 
-    setItem(key: string, item: T) {
-        this.map[key] = item;
+  setItem(key: string, item: T) {
+    this.map[key] = item;
+  }
+  getItem(key: string) {
+    return this.map[key];
+  }
+  clear() {
+    this.map = {};
+  }
+  printMap() {
+    for (let key in this.map) {
+      console.log(key, this.map[key]);
     }
-    getItem(key: string) {
-        return this.map[key];
-    }
-    clear() {
-        this.map = {}
-    }
-    printMap() {
-        for(let key in this.map) {
-            console.log(key, this.map[key])
-        }
-    }
+  }
 }
-
 
 //The map should be usable like shown below:
 
@@ -163,6 +162,117 @@ numberMap.setItem('bananas', 10);
 numberMap.printMap();
 
 const stringMap = new MyMap<string>();
-stringMap.setItem('name', "Max");
-stringMap.setItem('age', "27");
+stringMap.setItem('name', 'Max');
+stringMap.setItem('age', '27');
 stringMap.printMap();
+
+// Decorators
+console.log('<< DECORATORS >>');
+
+//decorator
+function logged(constructorFn: Function) {
+  console.log(constructorFn);
+}
+
+@logged
+class Pers {
+  constructor() {
+    console.log('Hy');
+  }
+}
+
+// decorator factory
+function logging(value: boolean) {
+  return value ? logged : undefined;
+}
+
+// @logging(false)
+class Cars {
+  constructor() {
+    console.log('Factories decorator true');
+  }
+}
+
+// advanced decorators
+function printable(constructorFn: Function) {
+  constructorFn.prototype.print = function() {
+    console.log(this);
+  };
+}
+// using multiple decorators
+//@logging(true)
+@logged
+@printable
+class Planta {
+  name = 'Green plant';
+}
+const planta = new Planta();
+(<any>planta).print();
+
+// Method decorators
+// Property decorators
+// factory
+function editable(value: boolean) {
+  return function(
+    target: any,
+    propName: string,
+    descriptor: PropertyDescriptor
+  ) {
+    descriptor.writable = value;
+  };
+}
+
+function overwritable(value: boolean): any {
+  return function(target: any, propName: string) {
+    const newDescriptor: PropertyDescriptor = {
+      writable: value
+    };
+    return newDescriptor;
+  };
+}
+
+class Projects {
+  @overwritable(true)
+  projectName: string;
+
+  constructor(name: string) {
+    this.projectName = name;
+  }
+  @editable(false)
+  calcBudget() {
+    console.log(1000);
+  }
+}
+
+const project = new Projects('Super project');
+project.calcBudget();
+// project.calcBudget = function() {
+//   console.log(2000);
+// };
+project.calcBudget();
+console.log(project);
+
+// Parameter decorator
+function printInfo(target: any, methodName: string, paramIndex: number) {
+  console.log('Target ', target);
+  console.log('Method Name ', methodName);
+  console.log('Param index ', paramIndex);
+}
+
+class Course {
+  name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
+  printstudentNumbers(mode: string, @printInfo printAll: boolean) {
+    if (printAll) {
+      console.log(100000);
+    } else {
+      console.log(2000);
+    }
+  }
+}
+
+const course = new Course('Decorators');
+course.printstudentNumbers('anything', true);
+course.printstudentNumbers('anything', false);
