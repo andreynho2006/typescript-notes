@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "lite-server": "^2.5.4"
+  },
+  "dependencies": {
+    "systemjs": "^6.2.6"
   }
 }
